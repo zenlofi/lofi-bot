@@ -1,5 +1,4 @@
 flask
 pydub
-selenium
 google-api-python-client
 google-auth
