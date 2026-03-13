@@ -7,6 +7,7 @@ from flask import Flask
 from pydub import AudioSegment
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2 import service_account
@@ -23,16 +24,21 @@ PROMPT = "lofi chill beat relaxing study music instrumental"
 # 1 GERAR MUSICA NO SUNO
 # -----------------------------
 def generate_music():
-    driver = webdriver.Chrome()
+    options = Options()
+    options.add_argument("--headless")  # roda sem interface gráfica
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    
+    driver = webdriver.Chrome(options=options)
     driver.get("https://suno.ai")
     time.sleep(10)
-    
+
     prompt = driver.find_element(By.TAG_NAME,"textarea")
     prompt.send_keys(PROMPT)
     generate = driver.find_element(By.TAG_NAME,"button")
     generate.click()
     time.sleep(120)
-
+    
     download = driver.find_element(By.XPATH,"//a[contains(@href,'.mp3')]")
     download.click()
     driver.quit()
